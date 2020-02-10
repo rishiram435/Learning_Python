@@ -16,6 +16,8 @@ public class RockyCateringMenu extends javax.swing.JFrame
 	final int SEARCH_BOOKINGS = 4;
 	final int SORT_BOOKINGS = 5;
 	final int EXIT = 6;
+	Booking[] book = {};
+        ArrayList<Booking> book1 = new ArrayList<Booking>(Arrays.asList(book));
 
 	// TODO -- declare any further constants
 
@@ -129,7 +131,7 @@ public class RockyCateringMenu extends javax.swing.JFrame
                     JOptionPane.showMessageDialog(null, "Error- the Guest number input must be over 10", "Inane Error" ,JOptionPane.ERROR_MESSAGE);
                 }
                 // Display message
-                else {
+                else if(guest > 10) {
                     JOptionPane.showMessageDialog(null, "Successfully added: " + guest);
                     break;
                 }
@@ -137,6 +139,9 @@ public class RockyCateringMenu extends javax.swing.JFrame
                 }
 		// TODO -- add the data to the array (use the new keyword and the parameterised constructor in Booking class)
                 booking[count]= new Booking(bookingName,guest);
+                
+                book1.add(booking[count]);
+                
 		// TODO -- display the booking name, number of guests and the charge
                 System.out.println(booking[count].getBookingName() + "\t\t\t\t" + booking[count].getGuests() + "\t\t$" + 
                                    booking[count].calculatePrice(guest));
@@ -146,7 +151,6 @@ public class RockyCateringMenu extends javax.swing.JFrame
                 String input = scan.nextLine();
                 if (input.equals("y")){
                     count++;
-                    continue;
                 }
                 else{
                     break;
@@ -187,12 +191,26 @@ public class RockyCateringMenu extends javax.swing.JFrame
             double avg=0;
             int count=0;
             int totalGuest=0;
+            // intializing the maxValue, maxPerson, minValue and maxValue
+            int maxValue = booking[0].getGuests();
+            String maxPerson= booking[0].getBookingName();
+            int minValue = booking[0].getGuests();
+            String minPerson = booking[0].getBookingName();
             for (int i=0;i<booking.length;i++) {
                 if (booking[i] != null){
-                    System.out.println(booking[i].getBookingName() + " has the maximum guest of " + booking[i].getGuests());
+                        if(booking[i].getGuests() < minValue){
+                            minValue = booking[i].getGuests();
+                            minPerson= booking[i].getBookingName();
+                        }
+                        else if (booking[i].getGuests() > maxValue){
+                            maxValue = booking[i].getGuests();
+                            maxPerson= booking[i].getBookingName();
+                        }
                     total += booking[i].calculatePrice(booking[i].getGuests());
+                    //Calculating the totalGuest in the total Booking Object
                     totalGuest += booking[i].getGuests();
                     count++;
+                    //Calculating the average
                     avg = totalGuest/count;
                 }
                 
@@ -200,8 +218,11 @@ public class RockyCateringMenu extends javax.swing.JFrame
                     break;
                 }
             }
+            System.out.println(maxPerson + " has the maximum guest of " + maxValue);
+            System.out.println(minPerson + " has the minimum guest of " + minValue);
             System.out.println("Average number of guests are " + avg);
             System.out.println("The total charges are:"+ total);
+            
 	}
 
 	private void searchBookings()
@@ -235,37 +256,20 @@ public class RockyCateringMenu extends javax.swing.JFrame
 		// TODO -- check if there has been two bookings entered (do this after getting the other functionality working)
 		// TODO -- sort the entries
             displayHeading();
-            String string[] = new String[]{booking[0].getBookingName(),booking[1].getBookingName()};
-            for(int i=0;i<1;i++){
-                if (booking[i] != null) {
-                    Arrays.sort(string);
-                    System.out.println(string[0] + "\t\t\t\t" + booking[0].getGuests() + "\t\t$"+
-                                booking[i].calculatePrice(booking[i].getGuests()));
-                    System.out.println(string[1] + "\t\t\t\t" + booking[1].getGuests() + "\t\t$"+
-                                booking[1].calculatePrice(booking[1].getGuests()));
-                }
-                
-                else {
-                    break;
-                }
-            }
-            
-//            String temp;
-//                for (int i=0;i<booking.length;i++){
-//                    for (int j=i+1;i<booking.length;j++){
-//                        
-//                        if (booking[i].getBookingName().compareTo(booking[j].getBookingName())> 0) {
-//                            temp= booking[i].getBookingName();
-//                            booking[i].getBookingName() = booking[j].getBookingName();
-//                            temp = booking[j].getBookingName() ;
-//                        }
-//                    }
-//                }
-//                
-//                for(int i=0;i<booking.length;i++){
-//                    System.out.print(booking[i].getBookingName());
-//                }
-		// TODO -- display the sorted list
+                     
+        if (booking != null){
+          // Using the Collection to sort the array
+          Collections.sort(book1);
+          for(Booking counter: book1){
+  			System.out.println(counter.getBookingName() + "\t\t\t\t" + counter.getGuests() + "\t\t$"+
+                                               counter.calculatePrice(counter.getGuests()));
+  		}
+        }
+        
+        else{
+            System.err.println("Error");
+        }
+
 
 	}
             
@@ -282,12 +286,4 @@ public class RockyCateringMenu extends javax.swing.JFrame
 		app.processBookings();
 	}
         
-//        public static Booking[] add(Booking[] arr, Booking... elements){
-//            Booking[] temparr = new Booking[arr.length+elements.length];
-//            System.arraycopy(arr,0,temparr,0,arr.length);
-//            
-//            for(int i=0; i<elements.length;i++)
-//                temparr[arr.length+i] = elements[i];
-//            return temparr; 
-//        }
 }

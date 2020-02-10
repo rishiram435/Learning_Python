@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author msi1
  */
-public class Booking {
+public class Booking implements Comparable<Booking> {
     
     Scanner in = new Scanner(System.in);
 
@@ -21,6 +21,7 @@ public class Booking {
     }
     
     public Booking(String bookingName, int guests){
+        super();
         this.bookingName= bookingName;
         this.guests= guests;
     }
@@ -55,6 +56,7 @@ public class Booking {
         this.guests = guests;
     }
     
+    
     public double calculatePrice(int guests){
         guests= getGuests();
         double intialPrice= 0.0;
@@ -86,6 +88,16 @@ public class Booking {
         Booking price = new Booking();
         
         
+    }
+    
+    @Override
+    public String toString(){
+        return ("(" + bookingName + ", " + guests + ")");
+    }
+
+    @Override
+    public int compareTo(Booking o) {
+        return toString().compareTo(o.toString());
     }
     
     
